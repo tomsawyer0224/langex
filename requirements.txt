@@ -1,0 +1,9 @@
+langchain-community==0.3.25
+langchain-ollama==0.3.3
+langchain-core==0.3.65
+langgraph==0.4.8
+ollama==0.5.1
+typing_extensions==4.14.0
+pillow==11.1.0
+#streamlit==1.44.1
+streamlit==1.45.1

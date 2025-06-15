@@ -1,0 +1,5 @@
+image_name: researchbot # name of image
+base_image: python:3.12-slim # base image
+models: # Ollama model
+  - llama3.2
+  - llama3.2:1b
