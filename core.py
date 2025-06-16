@@ -9,24 +9,13 @@ from langchain_core.messages import SystemMessage
 from langchain_ollama import ChatOllama
 
 from dataclasses import dataclass, field, fields
-
-SYSTEM_PROMPT = (
-    "You are a helpful, respectful and honest assistant. "
-    "Always answer as helpfully as possible, while being safe. "
-    "Your answers should not include any harmful, unethical, "
-    "racist, sexist, toxic, dangerous, or illegal content. "
-    "Please ensure that your responses are socially unbiased and positive in nature."
-    "\n\nIf a question does not make any sense, or is not factually coherent, "
-    "explain why instead of answering something not correct. "
-    "If you don't know the answer to a question, please don't share false information."
-)
-
+from prompts import CHAT_PROMPT, SUMMARIZE_PROMPT, REPHRASE_PROMPT
 
 @dataclass(kw_only=True)
 class Configuration:
     """The configuration for the agent."""
 
-    system_prompt: str = SYSTEM_PROMPT
+    system_prompt: str = CHAT_PROMPT
     model: str = "llama3.2:1b"
     temperature: float = 0.7
 
@@ -51,7 +40,22 @@ class State(TypedDict):
 builder = StateGraph(State)
 
 
-def chatbot(state: State, config: RunnableConfig = None):
+# def chatbot(state: State, config: RunnableConfig = None):
+#     runtime_config = Configuration.from_runnable_config(config)
+#     system_prompt = runtime_config.system_prompt
+#     model = runtime_config.model
+#     temperature = runtime_config.temperature
+#     llm = ChatOllama(model=model, temperature=temperature)
+
+#     response = llm.invoke([SystemMessage(content=system_prompt)] + state["messages"])
+#     return {"messages": [response]}
+
+
+# builder.add_edge(START, "chatbot")
+# builder.add_node("chatbot", chatbot)
+# builder.add_edge("chatbot", END)
+
+def langbot(state: State, config: RunnableConfig = None):
     runtime_config = Configuration.from_runnable_config(config)
     system_prompt = runtime_config.system_prompt
     model = runtime_config.model
@@ -62,6 +66,6 @@ def chatbot(state: State, config: RunnableConfig = None):
     return {"messages": [response]}
 
 
-builder.add_edge(START, "chatbot")
-builder.add_node("chatbot", chatbot)
-builder.add_edge("chatbot", END)
+builder.add_edge(START, "langbot")
+builder.add_node("langbot", langbot)
+builder.add_edge("langbot", END)
